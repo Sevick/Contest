@@ -1,0 +1,26 @@
+spring:
+  main:
+    banner-mode: off
+
+
+
+http:
+  keepAlive: false
+
+# disable dns caching
+networkaddress:
+  cache:
+    ttl: 0
+    negative:
+      ttl: 0
+
+contest:
+  ignoreinvalidconfig: true
+  testenginehttp:
+    readtimeout: 1000         #ms
+    connecttimeout: 1000      #ms
+  testresultwriterfile:
+    logfile: contest.logg
+    ignoreWriteErrors: false
+  testresultwriteroutput:
+    ignoreWriteErrors: false

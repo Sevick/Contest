@@ -33,9 +33,6 @@ public class TestProcessor implements ITestExecutor{
     @Value("${contest.ignoreinvalidconfig:true}")
     private boolean ignoreInvalidConfig;
 
-    // !!! read previous test data
-    //Map<String, TestResult> lastResults;
-
     public void runTests(InputStream inputStream) throws Exception {
         // initialize writer to ensure that they configured properly
         if (writersMap != null && !writersMap.isEmpty()) {
@@ -52,9 +49,9 @@ public class TestProcessor implements ITestExecutor{
 
         testReader.retrieveTests(inputStream,this);
 
-/*
+        /*
         testReader.retrieveTests(inputStream)
-                .stream()
+                .parallel()
                 .map(testParameters -> {
                     ITestEngine testEngine = testersMap.get("testEngine" + StringUtils.capitalize(testParameters.getType()));
                     if (testEngine == null) {
@@ -91,9 +88,8 @@ public class TestProcessor implements ITestExecutor{
                                 });
                     }
                 })
-                .forEach(result -> {
-                });
- */
+                .forEach(a -> System.out.println(a));
+         */
     }
 
     public Pair<TestParams, TestResult> execTest(TestParams testParameters) {
@@ -102,8 +98,10 @@ public class TestProcessor implements ITestExecutor{
             logger.log(ILogger.Severity.err, "TEST#" + testParameters.getId() + "  No such TestEngine: " + testParameters.getType() + " check that engine is annotated with @Service");
             if (!ignoreInvalidConfig)
                 throw new RuntimeException("TEST#" + testParameters.getId() + "  No such TestEngine: " + testParameters.getType());
+            else
+                return null;
         }
-        TestResult testResult=null;
+        TestResult testResult = null;
         try {
             testResult = testEngine.testConnection(testParameters);
         } catch (Exception e) {
@@ -116,9 +114,8 @@ public class TestProcessor implements ITestExecutor{
         Pair<TestParams, TestResult> resultPairParamResult = Pair.of(testParameters, testResult);
         if (testResultProcessorMap!=null && !testResultProcessorMap.isEmpty()) {
             testResultProcessorMap.entrySet().stream()
-                    .forEach(testResultProcessor -> {
-                        testResultProcessor.getValue().process(resultPairParamResult.getLeft(), resultPairParamResult.getRight());
-                    });
+                    .forEach(testResultProcessor ->
+                        testResultProcessor.getValue().process(resultPairParamResult.getLeft(), resultPairParamResult.getRight()));
         }
 
         // execute writers

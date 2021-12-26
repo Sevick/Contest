@@ -8,14 +8,19 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.env.Environment;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 @SpringBootApplication
 public class ContestApplication implements CommandLineRunner, ExitCodeGenerator {
     @Autowired
     private ILogger logger;
+    @Autowired
+    Environment env;
     @Autowired
     private TestProcessor testProcessor;
 
@@ -55,34 +60,39 @@ public class ContestApplication implements CommandLineRunner, ExitCodeGenerator 
             return;
         }
         if (commandLine.hasOption("inputfile")) {
-            logger.log(ILogger.Severity.debug,"Parameter: inputfile, value="+commandLine.getOptionValue("inputfile"));
+            logger.log(ILogger.Severity.debug, "Parameter: inputfile, value=" + commandLine.getOptionValue("inputfile"));
             try {
-                InputStream inStream =  new FileInputStream(ResourceUtils.getFile(commandLine.getOptionValue("inputfile")));
+                InputStream inStream = new FileInputStream(ResourceUtils.getFile(commandLine.getOptionValue("inputfile")));
                 System.setIn(inStream);
             } catch (FileNotFoundException e) {
-                logger.logException("Unable to read from input file: "+commandLine.getOptionValue("inputfile")+"   "+e.getMessage(),e);
+                logger.logException("Unable to read from input file: " + commandLine.getOptionValue("inputfile") + "   " + e.getMessage(), e);
                 exitCode = -1;
             }
         }
         if (commandLine.hasOption("outputfile")) {
-            logger.log(ILogger.Severity.debug,"Parameter: outputfile, value="+commandLine.getOptionValue("outputfile"));
-            try{
-                PrintStream outStream =  new PrintStream(new FileOutputStream(commandLine.getOptionValue("outputfile")));
+            logger.log(ILogger.Severity.debug, "Parameter: outputfile, value=" + commandLine.getOptionValue("outputfile"));
+            try {
+                PrintStream outStream = new PrintStream(new FileOutputStream(commandLine.getOptionValue("outputfile")));
                 System.setOut(outStream);
             } catch (Exception e) {
-                logger.logException("Unable to redirect output to: "+commandLine.getOptionValue("outputfile")+"   "+e.getMessage(),e);
+                logger.logException("Unable to redirect output to: " + commandLine.getOptionValue("outputfile") + "   " + e.getMessage(), e);
                 exitCode = -1;
             }
         }
 
-        // run tests
-        try {
-            testProcessor.runTests(System.in);
+        // run tests, check for "test" profile that must be used in all unit tests
+        if (!Arrays.asList(env.getActiveProfiles()).contains("test")) {
+            try {
+                testProcessor.runTests(System.in);
+            } catch (Exception e) {
+                exitCode = -2;
+            }
         }
-        catch (Exception e){
-            exitCode = -2;
-            return;
-        }
+    }
+
+    private boolean isRunningInTest() {
+        System.out.println("Thread.currentThread().getName():" + Thread.currentThread().getName());
+        return "main".equalsIgnoreCase(Thread.currentThread().getName());
     }
 
     @Override
@@ -93,21 +103,10 @@ public class ContestApplication implements CommandLineRunner, ExitCodeGenerator 
     private void printHelp() {
         String helpFilePath = "classpath:help.txt";
         try (InputStream in = new FileInputStream(ResourceUtils.getFile(helpFilePath))) {
-            String data = readFromInputStream(in);
-            System.out.println(data);
+            String helpText = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            System.out.println(helpText);
         } catch (IOException e) {
             logger.logException("Unable to read help file: " + helpFilePath, e);
         }
-    }
-
-    private String readFromInputStream(InputStream inputStream) throws IOException {
-        StringBuilder resultStringBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                resultStringBuilder.append(line).append("\n");
-            }
-        }
-        return resultStringBuilder.toString();
     }
 }

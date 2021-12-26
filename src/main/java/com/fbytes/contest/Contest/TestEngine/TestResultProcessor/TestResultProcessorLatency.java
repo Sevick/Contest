@@ -15,7 +15,7 @@ public class TestResultProcessorLatency implements ITestResultProcessor {
     @Autowired
     private ILogger logger;
 
-    @Value("${testresultprocessor.latency.threshold:1000}")
+    @Value("${contest.testresultprocessor.latency.threshold:1000}")
     private Integer threshold;
 
     Map<String, Integer> latencyResults = new ConcurrentHashMap<>();
@@ -23,13 +23,13 @@ public class TestResultProcessorLatency implements ITestResultProcessor {
     @Override
     public void process(TestParams testParams, TestResult testResult) {
         Integer timeElapsed = (Integer) testResult.getAdditionalProperties().get("latency");
-        if (timeElapsed!=null){
+        if (timeElapsed != null) {
             String testIdentifier = testParams.genIdentifier();
             Integer lastRunLatency = latencyResults.get(testIdentifier);
-            if (lastRunLatency!=null){
+            if (lastRunLatency != null) {
                 int delta = timeElapsed - lastRunLatency;
                 if (delta > threshold)
-                    logger.log(ILogger.Severity.warn, String.format("LATENCY GROWS ALERT: %s", testParams.getType(), testParams.getAddress()));
+                    logger.log(ILogger.Severity.warn, String.format("LATENCY GROWS ALERT: %s %s", testParams.getType(), testParams.getAddress()));
             }
             latencyResults.put(testIdentifier, timeElapsed);
         }

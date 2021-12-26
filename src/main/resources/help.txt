@@ -4,3 +4,4 @@ Connectivity test application
 How to use: ________Some useful help on perfect English should be here -) ______
    -help - show this help
    -inputfile=[FILE] - use file as input (stdin if not specified)
+   -outputfile=[FILE] - use file as input (stdout if not specified)

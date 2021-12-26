@@ -1,2 +1,4 @@
-{"type":"http","id":"id","address":"address","measureLatency":true,"measureBandwidth":true}
-{"type":"dns","id":"id","address":"address"}
+{"type":"bad","id":"1","address":"address"}
+{"type":"http","id":"2","address":"address","measureLatency":true,"measureBandwidth":true}
+{"type":"https","id":"3","address":"address","measureLatency":true,"measureBandwidth":true}
+{"type":"dns","id":"4","address":"address"}

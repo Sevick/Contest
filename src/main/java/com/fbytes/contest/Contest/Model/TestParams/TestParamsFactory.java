@@ -1,38 +1,44 @@
 package com.fbytes.contest.Contest.Model.TestParams;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidTypeIdException;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
-import org.reflections.Reflections;
+import com.fbytes.contest.Contest.Logger.ILogger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Locale;
-import java.util.Set;
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
 
 @Service
 public class TestParamsFactory {
     private final static ObjectMapper mapper = new ObjectMapper();
 
-    static String getClassShortName(Class cl, int offset) {
-        return cl.getName().substring(cl.getName().lastIndexOf('.') + offset);
+    @Autowired
+    ILogger logger;
+
+    @PostConstruct
+    private void init() {
+        mapper.registerSubtypes(new NamedType(TestParamsHttp.class, getJsonClassAnnotationValue(TestParamsHttp.class)));
+        mapper.registerSubtypes(new NamedType(TestParamsHttps.class, getJsonClassAnnotationValue(TestParamsHttps.class)));
+        mapper.registerSubtypes(new NamedType(TestParamsDns.class, getJsonClassAnnotationValue(TestParamsDns.class)));
     }
 
-    static {
-        // register subclasses of TestParams as jackson subtypes
-        Class baseClass = TestParams.class;
-        Reflections reflections = new Reflections(baseClass.getPackage().getName());
-        Set<Class<? extends TestParams>> children = reflections.getSubTypesOf(TestParams.class);
-        children.stream()
-                .forEach(cl -> {
-                    mapper.registerSubtypes(new NamedType(cl,
-                            getClassShortName(cl, 1 + getClassShortName(baseClass, 1).length())
-                                    .toLowerCase(Locale.ROOT)
-                    ));
-                });
+    private String getJsonClassAnnotationValue(Class<?> cl) {
+        try {
+            return ((JsonTypeName) Arrays.stream(cl.getAnnotations())
+                    .filter(a -> "com.fasterxml.jackson.annotation.JsonTypeName".equals(a.annotationType().getName()))
+                    .findAny().orElseThrow()).value();
+        }
+        catch (Exception e){
+            logger.logException("Class "+cl.getName()+ " must have @JsonTypeName annotation", e);
+            throw e;
+        }
     }
 
-    public TestParams getTestParams(String json) throws JsonProcessingException, InvalidTypeIdException {
+
+    public TestParams getTestParams(String json) throws JsonProcessingException {
         return mapper.readValue(json, TestParams.class);
     }
 }

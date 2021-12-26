@@ -1,19 +1,22 @@
 package com.fbytes.contest.Contest.TestReader;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestParams.TestParams;
 import com.fbytes.contest.Contest.Model.TestParams.TestParamsFactory;
 import com.fbytes.contest.Contest.TestProcessor.ITestExecutor;
-import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 
 @Service
 public class TestReader implements ITestReader {
@@ -26,27 +29,6 @@ public class TestReader implements ITestReader {
 
     @Value("${contest.ignoreinvalidconfig:true}")
     private boolean ignoreInvalidConfig;
-
-    private final static ObjectMapper mapper = new ObjectMapper();
-
-    static {
-        // register subclasses of TestParams as jackson subtypes
-        Class baseClass = TestParams.class;
-        Reflections reflections = new Reflections(baseClass.getPackage().getName());
-        Set<Class<? extends TestParams>> children = reflections.getSubTypesOf(TestParams.class);
-        children.stream()
-                .forEach(cl -> {
-                    mapper.registerSubtypes(new NamedType(cl,
-                            getClassShortName(cl, 1 + getClassShortName(baseClass, 1).length())
-                                    .toLowerCase(Locale.ROOT)
-                    ));
-                });
-    }
-
-    static String getClassShortName(Class cl, int offset) {
-        return cl.getName().substring(cl.getName().lastIndexOf('.') + offset);
-    }
-
 
     @Override
     public void retrieveTests(InputStream inputStream, ITestExecutor testExecutor) throws IOException {
@@ -67,4 +49,27 @@ public class TestReader implements ITestReader {
             }
         }
     }
+
+
+    public Stream<TestParams> retrieveTests(InputStream inputStream) throws Exception {
+        AtomicLong lineNum = new AtomicLong();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
+            return in.lines()
+                    .map(str -> {
+                        long lineNumVal = lineNum.incrementAndGet();
+                        try {
+                            TestParams testParams = testParamsFactory.getTestParams(str);
+                            testParams.setId(String.format("%d", lineNumVal));
+                            return testParams;
+                        } catch (Exception e) {
+                            logger.logException(String.format("Test#%d Exception reading json", lineNumVal), e);
+                            if (!ignoreInvalidConfig)
+                                throw new RuntimeException(e);
+                            else
+                                return null;
+                        }
+                    });
+        }
+    }
 }
+

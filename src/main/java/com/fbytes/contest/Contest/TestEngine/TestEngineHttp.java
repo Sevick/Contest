@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 @Service
@@ -18,23 +19,31 @@ public class TestEngineHttp extends TestEngine<TestParamsHttp> {
     @Autowired
     private ILogger logger;
 
-    @Value("${testenginehttp.readtimeout:1000}")
+    @Value("${contest.testenginehttp.readtimeout:1000}")
     private int readTimeout;    // millisec
-    @Value("${testenginehttp.connecttimeout:1000}")
+    @Value("${contest.testenginehttp.connecttimeout:1000}")
     private int connectTimeout; // millisec
-    @Value("${testenginehttp.bandwidthSampleSize:10240}")
+    @Value("${contest.testenginehttp.bandwidthSampleSize:10240}")
     private int bandwidthSampleSize;
 
     @Override
     public TestResult testConnectionImpl(TestParamsHttp testParams) throws Exception {
+        URL url;
+        try{
+            url = new URL(testParams.getAddress());
+        }
+        catch (MalformedURLException e){
+            logger.logException("Test#"+testParams.getId(),e);
+            throw e;
+        }
+
         try {
-            HttpURLConnection connection = getConnection(new URL(testParams.getAddress()));
+            HttpURLConnection connection = getConnection(url);
             connection.setConnectTimeout(connectTimeout);
             connection.setReadTimeout(readTimeout);
             connection.setRequestMethod(testParams.getHttpMethod());
             return testConnection(testParams, connection);
         } catch (IOException e) {
-            //logger.logException("Test#"+testParams.getId(),e);
             return new TestResult(false);
         }
     }
@@ -55,9 +64,8 @@ public class TestEngineHttp extends TestEngine<TestParamsHttp> {
         if (testParams.isMeasureBandwidth()) {
             try (InputStream inputStream = connection.getInputStream()) {
                 long start = System.nanoTime();
-                int bytesRead = -1;
                 byte[] buffer = new byte[bandwidthSampleSize];
-                bytesRead = inputStream.read(buffer, 0, bandwidthSampleSize);
+                int bytesRead = inputStream.read(buffer, 0, bandwidthSampleSize);
                 long finish = System.nanoTime();
                 long timeElapsed = finish - start;
                 if (bytesRead != -1) {

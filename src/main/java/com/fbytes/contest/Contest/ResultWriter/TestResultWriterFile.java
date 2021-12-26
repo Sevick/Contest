@@ -4,6 +4,7 @@ import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestResults.TestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PreDestroy;
@@ -14,13 +15,14 @@ import java.nio.charset.StandardCharsets;
 
 
 @Service
+@Profile("!skiplogger")
 public class TestResultWriterFile extends TestResultWriter{
 
     @Autowired
     private ILogger logger;
-    @Value("${testresultwriterfile.logfile:contest.log}")
+    @Value("${contest.testresultwriterfile.logfile:contest.log}")
     private String logFileName;
-    @Value("${testresultwriterfile.ignoreWriteErrors:false}")
+    @Value("${contest.testresultwriterfile.ignoreWriteErrors:false}")
     private boolean ignoreWriteErrors;
 
     private FileOutputStream fileOutputStream=null;
@@ -31,6 +33,7 @@ public class TestResultWriterFile extends TestResultWriter{
             try {
                 fileOutputStream.close();
             } catch (IOException e) {
+                // do nothing
             }
         }
     }
