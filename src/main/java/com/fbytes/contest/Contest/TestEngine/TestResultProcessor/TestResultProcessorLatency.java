@@ -1,4 +1,4 @@
-package com.fbytes.contest.Contest.TestEngine.Decorators;
+package com.fbytes.contest.Contest.TestEngine.TestResultProcessor;
 
 import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestParams.TestParams;

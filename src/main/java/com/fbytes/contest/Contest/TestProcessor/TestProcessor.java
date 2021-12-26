@@ -4,7 +4,7 @@ import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestParams.TestParams;
 import com.fbytes.contest.Contest.Model.TestResults.TestResult;
 import com.fbytes.contest.Contest.ResultWriter.ITestResultWriter;
-import com.fbytes.contest.Contest.TestEngine.Decorators.ITestResultProcessor;
+import com.fbytes.contest.Contest.TestEngine.TestResultProcessor.ITestResultProcessor;
 import com.fbytes.contest.Contest.TestEngine.ITestEngine;
 import com.fbytes.contest.Contest.TestReader.ITestReader;
 import org.apache.commons.lang3.StringUtils;
