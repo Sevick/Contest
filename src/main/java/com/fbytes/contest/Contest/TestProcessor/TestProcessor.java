@@ -48,48 +48,6 @@ public class TestProcessor implements ITestExecutor{
         }
 
         testReader.retrieveTests(inputStream,this);
-
-        /*
-        testReader.retrieveTests(inputStream)
-                .parallel()
-                .map(testParameters -> {
-                    ITestEngine testEngine = testersMap.get("testEngine" + StringUtils.capitalize(testParameters.getType()));
-                    if (testEngine == null) {
-                        logger.log(ILogger.Severity.err, "TEST#" + testParameters.getId() + "  No such TestEngine: " + testParameters.getType() + " check that engine is annotated with @Service");
-                        if (!ignoreInvalidConfig)
-                            throw new RuntimeException("TEST#" + testParameters.getId() + "  No such TestEngine: " + testParameters.getType());
-                    }
-                    try {
-                        TestResult testResult = testEngine.testConnection(testParameters);
-                        return Pair.of(testParameters, testResult);
-                    } catch (Exception e) {
-                        logger.log(ILogger.Severity.err, "TEST#" + testParameters.getId() + "  incorrect configuration of " + testParameters.getType() + "  : " + e.getMessage());
-                        if (!ignoreInvalidConfig)
-                            throw new RuntimeException("TEST#" + testParameters.getId() + "  incorrect configuration of " + testParameters.getType());
-                    }
-
-                    return null;
-                })
-                .peek(testParamResult -> {
-                    testResultProcessorMap.entrySet().stream()
-                            .forEach(testResultProcessor -> {
-                                testResultProcessor.getValue().process(testParamResult.getLeft(), testParamResult.getRight());
-                            });
-                })
-                .peek(testParamResult -> {
-                    if (writersMap != null && !writersMap.isEmpty()) {
-                        writersMap.entrySet().stream()
-                                .forEach(writersMapsEntry -> {
-                                    try {
-                                        writersMapsEntry.getValue().write(testParamResult.getRight());
-                                    } catch (Exception e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                });
-                    }
-                })
-                .forEach(a -> System.out.println(a));
-         */
     }
 
     public Pair<TestParams, TestResult> execTest(TestParams testParameters) {

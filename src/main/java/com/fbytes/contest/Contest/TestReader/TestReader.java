@@ -14,9 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Stream;
 
 @Service
 public class TestReader implements ITestReader {
@@ -47,28 +44,6 @@ public class TestReader implements ITestReader {
                 }
                 lineNum++;
             }
-        }
-    }
-
-
-    public Stream<TestParams> retrieveTests(InputStream inputStream) throws Exception {
-        AtomicLong lineNum = new AtomicLong();
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(inputStream))) {
-            return in.lines()
-                    .map(str -> {
-                        long lineNumVal = lineNum.incrementAndGet();
-                        try {
-                            TestParams testParams = testParamsFactory.getTestParams(str);
-                            testParams.setId(String.format("%d", lineNumVal));
-                            return testParams;
-                        } catch (Exception e) {
-                            logger.logException(String.format("Test#%d Exception reading json", lineNumVal), e);
-                            if (!ignoreInvalidConfig)
-                                throw new RuntimeException(e);
-                            else
-                                return null;
-                        }
-                    });
         }
     }
 }
