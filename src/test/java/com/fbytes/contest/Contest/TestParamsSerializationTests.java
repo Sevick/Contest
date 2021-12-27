@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -36,7 +37,7 @@ public class TestParamsSerializationTests {
 
     @Test
     public void testSerializationHttps() throws JsonProcessingException {
-        TestParamsHttp testHttp = new TestParamsHttps("id", "address", "HEAD", 200, true, true);
+        TestParamsHttp testHttp = new TestParamsHttps("id", "address", "HEAD", 200, true, true, false);
         String jsonResult = mapper.writeValueAsString(testHttp);
         Assertions.assertEquals("{\"type\":\"http\",\"id\":\"id\",\"address\":\"address\",\"httpMethod\":\"HEAD\",\"expectedResultCode\":200,\"measureLatency\":true,\"measureBandwidth\":true,\"bypassCertCheck\":false}", jsonResult);
     }
@@ -51,6 +52,6 @@ public class TestParamsSerializationTests {
         Assertions.assertEquals("HEAD", ((TestParamsHttps) testParams).getHttpMethod());
         Assertions.assertEquals(200, ((TestParamsHttps) testParams).getExpectedResultCode());
         assertTrue(((TestParamsHttps) testParams).getMeasureLatency());
-        assertTrue(((TestParamsHttps) testParams).getMeasureBandwidth());
+        assertFalse(((TestParamsHttps) testParams).getMeasureBandwidth());
     }
 }

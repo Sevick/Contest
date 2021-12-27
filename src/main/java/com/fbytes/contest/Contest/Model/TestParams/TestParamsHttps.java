@@ -16,4 +16,9 @@ public class TestParamsHttps extends TestParamsHttp {
     public TestParamsHttps(String id, String address, String httpMethod, int expectedResultCode, Boolean measureLatency, Boolean measureBandwidth) {
         super(id, address, httpMethod, expectedResultCode, measureLatency, measureBandwidth);
     }
+
+    public TestParamsHttps(String id, String address, String httpMethod, int expectedResultCode, Boolean measureLatency, Boolean measureBandwidth, Boolean bypassCertCheck) {
+        super(id, address, httpMethod, expectedResultCode, measureLatency, measureBandwidth);
+        this.bypassCertCheck = bypassCertCheck;
+    }
 }

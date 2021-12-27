@@ -26,6 +26,7 @@ public class TestEngineHttpTests {
     public void testHttpOk() throws IOException {
         HttpURLConnection huc = Mockito.mock(HttpURLConnection.class);
         Mockito.when(huc.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
+        Mockito.when(huc.getResponseMessage()).thenReturn("HTTP_OK");
         TestParamsHttp testParamsHttp = new TestParamsHttp("777", "http://yahoo.com", "HEAD", 200, false, false);
         TestResult testResultPassed = testEngineHttp.testConnection(testParamsHttp, huc);
         assertTrue(testResultPassed.getTestPassed());
@@ -38,6 +39,7 @@ public class TestEngineHttpTests {
     public void testHttpFail() throws IOException {
         HttpURLConnection huc = Mockito.mock(HttpURLConnection.class);
         Mockito.when(huc.getResponseCode()).thenReturn(HttpURLConnection.HTTP_FORBIDDEN);
+        Mockito.when(huc.getResponseMessage()).thenReturn("HTTP_FORBIDDEN");
         TestParamsHttp testParamsHttp = new TestParamsHttp("777", "http://yahoo.com", "HEAD", 403, false, false);
         TestResult testResultPassed = testEngineHttp.testConnection(testParamsHttp, huc);
         assertTrue(testResultPassed.getTestPassed());
