@@ -20,9 +20,8 @@ public class TestEngineDns extends TestEngine<TestParamsDns> {
         URL url;
         try {
             url = new URL(testParams.getAddress());
-        }
-        catch (MalformedURLException e){
-            logger.logException("Test#"+testParams.getId(),e);
+        } catch (MalformedURLException e) {
+            logger.logException("Test#" + testParams.getId(), e);
             throw e;
         }
         try {

@@ -30,9 +30,8 @@ public class TestParamsFactory {
             return ((JsonTypeName) Arrays.stream(cl.getAnnotations())
                     .filter(a -> "com.fasterxml.jackson.annotation.JsonTypeName".equals(a.annotationType().getName()))
                     .findAny().orElseThrow()).value();
-        }
-        catch (Exception e){
-            logger.logException("Class "+cl.getName()+ " must have @JsonTypeName annotation", e);
+        } catch (Exception e) {
+            logger.logException("Class " + cl.getName() + " must have @JsonTypeName annotation", e);
             throw e;
         }
     }

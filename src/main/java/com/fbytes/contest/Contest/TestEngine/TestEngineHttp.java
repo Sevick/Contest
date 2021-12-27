@@ -29,11 +29,10 @@ public class TestEngineHttp extends TestEngine<TestParamsHttp> {
     @Override
     public TestResult testConnectionImpl(TestParamsHttp testParams) throws Exception {
         URL url;
-        try{
+        try {
             url = new URL(testParams.getAddress());
-        }
-        catch (MalformedURLException e){
-            logger.logException("Test#"+testParams.getId(),e);
+        } catch (MalformedURLException e) {
+            logger.logException("Test#" + testParams.getId(), e);
             throw e;
         }
 

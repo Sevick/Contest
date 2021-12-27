@@ -6,23 +6,23 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoggerLog4j implements ILogger{
+public class LoggerLog4j implements ILogger {
 
     protected final static Logger logger = LogManager.getLogger(LoggerLog4j.class); //LoggerFactory.getLogger(LoggerLog4j.class);
 
     @Override
     public void logException(Exception e) {
-        log(Severity.err, String.format("%s\n%s",e.getMessage(), ExceptionUtils.getStackTrace(e)));
+        log(Severity.err, String.format("%s\n%s", e.getMessage(), ExceptionUtils.getStackTrace(e)));
     }
 
     @Override
     public void logException(String msg, Exception e) {
-        log(Severity.err, String.format("%s\n%s",msg + "\n" + e.getMessage(), ExceptionUtils.getStackTrace(e)),2);
+        log(Severity.err, String.format("%s\n%s", msg + "\n" + e.getMessage(), ExceptionUtils.getStackTrace(e)), 2);
     }
 
     @Override
     public void log(Severity severity, String msg) {
-        log(severity,msg,2);
+        log(severity, msg, 2);
     }
 
 
@@ -30,15 +30,15 @@ public class LoggerLog4j implements ILogger{
 
         String calledFrom = "";
 
-        try{
+        try {
             throw new RuntimeException();
-        }catch (Exception e){
+        } catch (Exception e) {
             StackTraceElement[] stackTrace = e.getStackTrace();
             calledFrom = stackTrace[stackIndex].toString();
         }
 
         Logger logger = LogManager.getLogger(calledFrom);
-        switch (severity){
+        switch (severity) {
             case err:
                 logger.error(String.format(msg));
                 break;

@@ -4,10 +4,9 @@ import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestParams.TestParams;
 import com.fbytes.contest.Contest.Model.TestResults.TestResult;
 import com.fbytes.contest.Contest.ResultWriter.ITestResultWriter;
-import com.fbytes.contest.Contest.TestResultProcessor.ITestResultProcessor;
 import com.fbytes.contest.Contest.TestEngine.ITestEngine;
 import com.fbytes.contest.Contest.TestReader.ITestReader;
-import com.fbytes.contest.Contest.TestResultsLoader.ITestResultsLoader;
+import com.fbytes.contest.Contest.TestResultProcessor.ITestResultProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import java.util.Map;
 
 
 @Service
-public class TestProcessor implements ITestExecutor{
+public class TestProcessor implements ITestExecutor {
     @Autowired
     private ILogger logger;
     @Autowired
@@ -48,7 +47,7 @@ public class TestProcessor implements ITestExecutor{
                     });
         }
 
-        testReader.retrieveTests(inputStream,this);
+        testReader.retrieveTests(inputStream, this);
     }
 
 
@@ -72,10 +71,10 @@ public class TestProcessor implements ITestExecutor{
 
         // apply result processors
         Pair<TestParams, TestResult> resultPairParamResult = Pair.of(testParameters, testResult);
-        if (testResultProcessorMap!=null && !testResultProcessorMap.isEmpty()) {
+        if (testResultProcessorMap != null && !testResultProcessorMap.isEmpty()) {
             testResultProcessorMap.entrySet().stream()
                     .forEach(testResultProcessor ->
-                        testResultProcessor.getValue().process(resultPairParamResult.getLeft(), resultPairParamResult.getRight()));
+                            testResultProcessor.getValue().process(resultPairParamResult.getLeft(), resultPairParamResult.getRight()));
         }
 
         // execute writers
