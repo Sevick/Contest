@@ -4,9 +4,10 @@ import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestParams.TestParams;
 import com.fbytes.contest.Contest.Model.TestResults.TestResult;
 import com.fbytes.contest.Contest.ResultWriter.ITestResultWriter;
-import com.fbytes.contest.Contest.TestEngine.TestResultProcessor.ITestResultProcessor;
+import com.fbytes.contest.Contest.TestResultProcessor.ITestResultProcessor;
 import com.fbytes.contest.Contest.TestEngine.ITestEngine;
 import com.fbytes.contest.Contest.TestReader.ITestReader;
+import com.fbytes.contest.Contest.TestResultsLoader.ITestResultsLoader;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class TestProcessor implements ITestExecutor{
     private Map<String, ITestResultProcessor> testResultProcessorMap;
 
     @Value("${contest.ignoreinvalidconfig:true}")
-    private boolean ignoreInvalidConfig;
+    private Boolean ignoreInvalidConfig;
 
     public void runTests(InputStream inputStream) throws Exception {
         // initialize writer to ensure that they configured properly
@@ -49,6 +50,7 @@ public class TestProcessor implements ITestExecutor{
 
         testReader.retrieveTests(inputStream,this);
     }
+
 
     public Pair<TestParams, TestResult> execTest(TestParams testParameters) {
         ITestEngine testEngine = testersMap.get("testEngine" + StringUtils.capitalize(testParameters.getType()));

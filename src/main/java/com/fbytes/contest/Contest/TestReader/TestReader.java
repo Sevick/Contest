@@ -25,7 +25,7 @@ public class TestReader implements ITestReader {
     private TestParamsFactory testParamsFactory;
 
     @Value("${contest.ignoreinvalidconfig:true}")
-    private boolean ignoreInvalidConfig;
+    private Boolean ignoreInvalidConfig;
 
     @Override
     public void retrieveTests(InputStream inputStream, ITestExecutor testExecutor) throws IOException {

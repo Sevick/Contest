@@ -20,11 +20,11 @@ public class TestEngineHttp extends TestEngine<TestParamsHttp> {
     private ILogger logger;
 
     @Value("${contest.testenginehttp.readtimeout:1000}")
-    private int readTimeout;    // millisec
+    private Integer readTimeout;    // millisec
     @Value("${contest.testenginehttp.connecttimeout:1000}")
-    private int connectTimeout; // millisec
+    private Integer connectTimeout; // millisec
     @Value("${contest.testenginehttp.bandwidthSampleSize:10240}")
-    private int bandwidthSampleSize;
+    private Integer bandwidthSampleSize;
 
     @Override
     public TestResult testConnectionImpl(TestParamsHttp testParams) throws Exception {
@@ -44,7 +44,7 @@ public class TestEngineHttp extends TestEngine<TestParamsHttp> {
             connection.setRequestMethod(testParams.getHttpMethod());
             return testConnection(testParams, connection);
         } catch (IOException e) {
-            return new TestResult(false);
+            return new TestResult(testParams.genIdentifier(), false);
         }
     }
 
@@ -55,13 +55,13 @@ public class TestEngineHttp extends TestEngine<TestParamsHttp> {
 
     public TestResult testConnection(TestParamsHttp testParams, HttpURLConnection connection) throws IOException {
         logger.log(ILogger.Severity.info, String.format("Test#%s => HTTP %s", testParams.getId(), testParams.getAddress()));
-        TestResult result = new TestResult();
+        TestResult result = new TestResult(testParams.genIdentifier());
         result.getAdditionalProperties().put("responseCode", connection.getResponseCode());
         result.getAdditionalProperties().put("responseMessage", connection.getResponseMessage());
         if (connection.getResponseCode() == testParams.getExpectedResultCode())
             result.setTestPassed(true);
 
-        if (testParams.isMeasureBandwidth()) {
+        if (testParams.getMeasureBandwidth()) {
             try (InputStream inputStream = connection.getInputStream()) {
                 long start = System.nanoTime();
                 byte[] buffer = new byte[bandwidthSampleSize];

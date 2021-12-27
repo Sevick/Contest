@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class TestParamsHttps extends TestParamsHttp {
-    protected boolean bypassCertCheck;
+    protected Boolean bypassCertCheck;
 
-    public TestParamsHttps(String id, String address, String httpMethod, int expectedResultCode, boolean measureLatency, boolean measureBandwidth) {
+    public TestParamsHttps(String id, String address, String httpMethod, int expectedResultCode, Boolean measureLatency, Boolean measureBandwidth) {
         super(id, address, httpMethod, expectedResultCode, measureLatency, measureBandwidth);
     }
 }

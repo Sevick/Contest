@@ -2,8 +2,6 @@ spring:
   main:
     banner-mode: off
 
-
-
 http:
   keepAlive: false
 
@@ -24,3 +22,9 @@ contest:
     ignoreWriteErrors: false
   testresultwriteroutput:
     ignoreWriteErrors: false
+  testresultsloader:
+    ignoreErrors: true
+    datafile: contest.logg
+  testresultprocessor:
+    latency:
+      threshold: 10

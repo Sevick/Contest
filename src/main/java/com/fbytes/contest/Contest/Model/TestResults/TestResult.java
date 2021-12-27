@@ -6,24 +6,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Data
+@NoArgsConstructor
 public class TestResult {
 
     @JsonProperty(required = true)
-    private boolean testPassed;
+    private String testIdentifier;
+    @JsonProperty(required = true)
+    private Boolean testPassed;
 
-    private final static ObjectMapper mapper = new ObjectMapper();
-
-    public TestResult(boolean testPassed) {
+    public TestResult(String testIdentifier, Boolean testPassed) {
+        this.testIdentifier = testIdentifier;
         this.testPassed = testPassed;
     }
 
-    public TestResult() {
+    private final static ObjectMapper mapper = new ObjectMapper();
+
+    public TestResult(String testIdentifier) {
         testPassed = false;
+        this.testIdentifier = testIdentifier;
     }
 
     public String toString() {
@@ -34,7 +40,7 @@ public class TestResult {
         }
     }
 
-    Map<String, Object> additionalProperties = new HashMap<>();
+    Map<String, Object> additionalProperties = new ConcurrentHashMap<>();
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {

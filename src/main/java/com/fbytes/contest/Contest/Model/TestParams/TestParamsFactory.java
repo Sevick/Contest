@@ -16,7 +16,7 @@ public class TestParamsFactory {
     private final static ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    ILogger logger;
+    private ILogger logger;
 
     @PostConstruct
     private void init() {

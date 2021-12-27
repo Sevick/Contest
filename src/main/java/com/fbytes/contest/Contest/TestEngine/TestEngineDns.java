@@ -17,16 +17,22 @@ public class TestEngineDns extends TestEngine<TestParamsDns> {
 
     @Override
     public TestResult testConnectionImpl(TestParamsDns testParams) throws Exception {
-        URL url = null;
-        url = new URL(testParams.getAddress());
+        URL url;
+        try {
+            url = new URL(testParams.getAddress());
+        }
+        catch (MalformedURLException e){
+            logger.logException("Test#"+testParams.getId(),e);
+            throw e;
+        }
         try {
             InetAddress addr1 = InetAddress.getByName(url.getHost());
             addr1.getHostAddress();
         } catch (Exception e) {
             logger.log(ILogger.Severity.info, String.format("Test#%s FAILED =>DNS %s", testParams.getId(), testParams.getAddress()));
-            return new TestResult(false);
+            return new TestResult(testParams.genIdentifier(), false);
         }
         logger.log(ILogger.Severity.info, "Test#" + testParams.getId() + " =>DNS " + testParams.getAddress());
-        return new TestResult(true);
+        return new TestResult(testParams.genIdentifier(), true);
     }
 }

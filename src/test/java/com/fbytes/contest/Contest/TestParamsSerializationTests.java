@@ -50,7 +50,7 @@ public class TestParamsSerializationTests {
         Assertions.assertEquals("address", testParams.getAddress());
         Assertions.assertEquals("HEAD", ((TestParamsHttps) testParams).getHttpMethod());
         Assertions.assertEquals(200, ((TestParamsHttps) testParams).getExpectedResultCode());
-        assertTrue(((TestParamsHttps) testParams).isMeasureLatency());
-        assertTrue(((TestParamsHttps) testParams).isMeasureBandwidth());
+        assertTrue(((TestParamsHttps) testParams).getMeasureLatency());
+        assertTrue(((TestParamsHttps) testParams).getMeasureBandwidth());
     }
 }

@@ -11,9 +11,9 @@ import java.io.FileOutputStream;
 @Service
 public class TestResultWriterOutput extends TestResultWriter {
     @Autowired
-    ILogger logger;
+    private ILogger logger;
     @Value("${contest.testresultwriteroutput.ignoreWriteErrors:false}")
-    private boolean ignoreWriteErrors;
+    private Boolean ignoreWriteErrors;
 
     @Override
     public void write(TestResult testResult){

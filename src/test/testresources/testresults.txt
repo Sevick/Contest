@@ -1,0 +1,24 @@
+{"testIdentifier":"dns-http://yahoo.com","testPassed":true,"latency":0}
+{"testIdentifier":"http-http://yahoo.com","testPassed":true,"latency":0,"responseMessage":"Moved Permanently","responseCode":301}
+{"testIdentifier":"http-http://yahoo.com","testPassed":false,"latency":0,"responseMessage":"Moved Permanently","responseCode":301}
+{"testIdentifier":"http-http://fbytes.com/contacts/","testPassed":false,"latency":0}
+{"testIdentifier":"https-http://ynet-images1.yit.co.il/picserver5/crop_images/2021/12/25/H1Cl00lrsK/H1Cl00lrsK_0_0_3000_2001_0_x-large.jpg","testPassed":true,"bandwidth":86316.53,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"https-https://ynet-images1.yit.co.il/picserver5/crop_images/2021/12/25/H1Cl00lrsK/H1Cl00lrsK_0_0_3000_2001_0_x-large.jpg","testPassed":true,"bandwidth":1522529.1,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"dns-http://yahoo.com","testPassed":true,"latency":0}
+{"testIdentifier":"http-http://yahoo.com","testPassed":true,"latency":0,"responseMessage":"Moved Permanently","responseCode":301}
+{"testIdentifier":"http-http://yahoo.com","testPassed":false,"latency":0,"responseMessage":"Moved Permanently","responseCode":301}
+{"testIdentifier":"http-http://fbytes.com/contacts/","testPassed":true,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"https-http://ynet-images1.yit.co.il/picserver5/crop_images/2021/12/25/H1Cl00lrsK/H1Cl00lrsK_0_0_3000_2001_0_x-large.jpg","testPassed":true,"bandwidth":228310.52,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"https-https://ynet-images1.yit.co.il/picserver5/crop_images/2021/12/25/H1Cl00lrsK/H1Cl00lrsK_0_0_3000_2001_0_x-large.jpg","testPassed":true,"bandwidth":1092087.8,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"dns-http://yahoo.com","testPassed":true,"latency":0}
+{"testIdentifier":"http-http://yahoo.com","testPassed":true,"latency":0,"responseMessage":"Moved Permanently","responseCode":301}
+{"testIdentifier":"http-http://yahoo.com","testPassed":false,"latency":0,"responseMessage":"Moved Permanently","responseCode":301}
+{"testIdentifier":"http-http://fbytes.com/contacts/","testPassed":true,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"https-http://ynet-images1.yit.co.il/picserver5/crop_images/2021/12/25/H1Cl00lrsK/H1Cl00lrsK_0_0_3000_2001_0_x-large.jpg","testPassed":true,"bandwidth":177721.58,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"https-https://ynet-images1.yit.co.il/picserver5/crop_images/2021/12/25/H1Cl00lrsK/H1Cl00lrsK_0_0_3000_2001_0_x-large.jpg","testPassed":true,"bandwidth":1283203.1,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"dns-http://yahoo.com","testPassed":true,"latency":0}
+{"testIdentifier":"http-http://yahoo.com","testPassed":true,"latency":0,"responseMessage":"Moved Permanently","responseCode":301}
+{"testIdentifier":"http-http://yahoo.com","testPassed":false,"latency":0,"responseMessage":"Moved Permanently","responseCode":301}
+{"testIdentifier":"http-http://fbytes.com/contacts/","testPassed":true,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"https-http://ynet-images1.yit.co.il/picserver5/crop_images/2021/12/25/H1Cl00lrsK/H1Cl00lrsK_0_0_3000_2001_0_x-large.jpg","testPassed":true,"bandwidth":155075.83,"latency":0,"responseMessage":"OK","responseCode":200}
+{"testIdentifier":"https-https://ynet-images1.yit.co.il/picserver5/crop_images/2021/12/25/H1Cl00lrsK/H1Cl00lrsK_0_0_3000_2001_0_x-large.jpg","testPassed":true,"bandwidth":1351351.4,"latency":0,"responseMessage":"OK","responseCode":200}

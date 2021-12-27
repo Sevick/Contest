@@ -15,9 +15,9 @@ public class TestParamsHttp extends TestParams {
 
     @JsonProperty(required = true)
     private String httpMethod;      // an example of mandatory field
-    private int expectedResultCode;
-    private boolean measureLatency;
-    private boolean measureBandwidth;
+    private Integer expectedResultCode;
+    private Boolean measureLatency;
+    private Boolean measureBandwidth;
 
     public TestParamsHttp() {
         super();
@@ -27,7 +27,7 @@ public class TestParamsHttp extends TestParams {
         this.expectedResultCode = 200;
     }
 
-    public TestParamsHttp(String id, String address, String httpMethod, int expectedResultCode, boolean measureLatency, boolean measureBandwidth) {
+    public TestParamsHttp(String id, String address, String httpMethod, int expectedResultCode, Boolean measureLatency, Boolean measureBandwidth) {
         super("http", id, address);
         this.httpMethod = httpMethod;
         this.measureLatency = measureLatency;
