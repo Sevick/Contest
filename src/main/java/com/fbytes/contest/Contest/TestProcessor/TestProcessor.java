@@ -35,8 +35,10 @@ public class TestProcessor implements ITestExecutor {
     private Boolean ignoreInvalidConfig;
     @Value("${contest.testprocessor.threads:10}")
     private Integer threadsCount;
+    @Value("${contest.testprocessor.shutdowntimeout:60}")
+    private Integer shutdowntimeout;        // sec
 
-    ExecutorService executor;
+    private ExecutorService executor;
 
     @PostConstruct
     private void init() {
@@ -62,10 +64,10 @@ public class TestProcessor implements ITestExecutor {
         awaitTerminationAfterShutdown(executor);
     }
 
-    public void awaitTerminationAfterShutdown(ExecutorService threadPool) {
+    private void awaitTerminationAfterShutdown(ExecutorService threadPool) {
         threadPool.shutdown();
         try {
-            if (!threadPool.awaitTermination(60, TimeUnit.SECONDS)) {
+            if (!threadPool.awaitTermination(shutdowntimeout, TimeUnit.SECONDS)) {
                 threadPool.shutdownNow();
             }
         } catch (InterruptedException ex) {

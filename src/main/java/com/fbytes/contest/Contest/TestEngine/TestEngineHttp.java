@@ -53,7 +53,7 @@ public class TestEngineHttp extends TestEngine<TestParamsHttp> {
 
 
     public TestResult testConnection(TestParamsHttp testParams, HttpURLConnection connection) throws IOException {
-        logger.log(ILogger.Severity.info, String.format("Test#%s => HTTP %s", testParams.getId(), testParams.getAddress()));
+        logger.log(ILogger.Severity.debug, String.format("Test#%s => HTTP %s", testParams.getId(), testParams.getAddress()));
         TestResult result = new TestResult(testParams.genIdentifier());
         result.getAdditionalProperties().put("responseCode", connection.getResponseCode());
         result.getAdditionalProperties().put("responseMessage", connection.getResponseMessage());

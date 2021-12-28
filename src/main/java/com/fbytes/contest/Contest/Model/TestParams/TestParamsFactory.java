@@ -6,10 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fbytes.contest.Contest.Logger.ILogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.Set;
 
 @Service
 public class TestParamsFactory {
@@ -20,24 +24,30 @@ public class TestParamsFactory {
 
     @PostConstruct
     private void init() {
-        mapper.registerSubtypes(new NamedType(TestParamsHttp.class, getJsonClassAnnotationValue(TestParamsHttp.class)));
-        mapper.registerSubtypes(new NamedType(TestParamsHttps.class, getJsonClassAnnotationValue(TestParamsHttps.class)));
-        mapper.registerSubtypes(new NamedType(TestParamsDns.class, getJsonClassAnnotationValue(TestParamsDns.class)));
+        // search for TestParams ancestors in the same package and register jackson subtypes
+        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+        provider.addIncludeFilter(new AssignableTypeFilter(TestParams.class));
+        Set<BeanDefinition> components = provider.findCandidateComponents(TestParams.class.getPackageName().replaceAll("[.]", "/"));
+        components.forEach(component -> {
+            logger.log(ILogger.Severity.debug, "Register TestParams subtype: " + component.getBeanClassName());
+            try {
+                Class<?> paramsImplClass = Class.forName(component.getBeanClassName());
+                String subType = getJsonClassAnnotationValue(paramsImplClass);
+                mapper.registerSubtypes(new NamedType(paramsImplClass, subType));
+            } catch (Exception e) {
+                logger.logException(e);
+                throw new RuntimeException(e);
+            }
+        });
     }
-
-    private String getJsonClassAnnotationValue(Class<?> cl) {
-        try {
-            return ((JsonTypeName) Arrays.stream(cl.getAnnotations())
-                    .filter(a -> "com.fasterxml.jackson.annotation.JsonTypeName".equals(a.annotationType().getName()))
-                    .findAny().orElseThrow()).value();
-        } catch (Exception e) {
-            logger.logException("Class " + cl.getName() + " must have @JsonTypeName annotation", e);
-            throw e;
-        }
-    }
-
 
     public TestParams getTestParams(String json) throws JsonProcessingException {
         return mapper.readValue(json, TestParams.class);
+    }
+
+    private String getJsonClassAnnotationValue(Class<?> cl) {
+        return ((JsonTypeName) Arrays.stream(cl.getAnnotations())
+                .filter(a -> "com.fasterxml.jackson.annotation.JsonTypeName".equals(a.annotationType().getName()))
+                .findAny().orElseThrow()).value();
     }
 }

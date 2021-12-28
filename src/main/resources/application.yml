@@ -14,9 +14,12 @@ networkaddress:
 
 contest:
   ignoreinvalidconfig: true
+  testprocessor:
+    threads: 10
+    shutdowntimeout: 60       #sec
   testenginehttp:
-    readtimeout: 1000         #ms
-    connecttimeout: 1000      #ms
+    readtimeout: 1000         #msec
+    connecttimeout: 1000      #msec
   testresultwriterfile:
     logfile: contest.logg
     ignoreWriteErrors: false
