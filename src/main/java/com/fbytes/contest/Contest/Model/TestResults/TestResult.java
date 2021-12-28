@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @NoArgsConstructor
 public class TestResult {
 
+    private String testId;
     @JsonProperty(required = true)
     private String testIdentifier;
     @JsonProperty(required = true)

@@ -50,7 +50,7 @@ public class TestResultProcessorLatency implements ITestResultProcessor {
             if (lastRunLatency != null) {
                 int delta = timeElapsed - lastRunLatency;
                 if (delta > threshold)
-                    logger.log(ILogger.Severity.warn, String.format("LATENCY GROWS ALERT: %s %s", testParams.getType(), testParams.getAddress()));
+                    logger.log(ILogger.Severity.warn, String.format("Test#%s LATENCY GROWS ALERT: %s %s", testParams.getId(), testParams.getType(), testParams.getAddress()));
             }
             latencyResults.put(hashGen.genHash(testIdentifier), timeElapsed);
         }

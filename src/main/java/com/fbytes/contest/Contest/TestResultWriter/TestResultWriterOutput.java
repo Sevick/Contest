@@ -1,12 +1,10 @@
-package com.fbytes.contest.Contest.ResultWriter;
+package com.fbytes.contest.Contest.TestResultWriter;
 
 import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestResults.TestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.io.FileOutputStream;
 
 @Service
 public class TestResultWriterOutput extends TestResultWriter {

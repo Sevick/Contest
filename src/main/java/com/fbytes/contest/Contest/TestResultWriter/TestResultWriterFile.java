@@ -1,4 +1,4 @@
-package com.fbytes.contest.Contest.ResultWriter;
+package com.fbytes.contest.Contest.TestResultWriter;
 
 import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestResults.TestResult;

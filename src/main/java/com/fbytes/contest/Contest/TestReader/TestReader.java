@@ -4,6 +4,7 @@ import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestParams.TestParams;
 import com.fbytes.contest.Contest.Model.TestParams.TestParamsFactory;
 import com.fbytes.contest.Contest.TestProcessor.ITestExecutor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -35,7 +36,8 @@ public class TestReader implements ITestReader {
             while (inScan.hasNext()) {
                 try {
                     TestParams testParams = testParamsFactory.getTestParams(inScan.next());
-                    testParams.setId(String.format("%d", lineNum));
+                    if (StringUtils.isEmpty(testParams.getId()))
+                        testParams.setId(String.format("%d", lineNum));
                     testExecutor.execTest(testParams);
                 } catch (Exception e) {
                     logger.logException(String.format("Test#%d Exception reading json", lineNum), e);
