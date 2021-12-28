@@ -7,7 +7,7 @@ How to use:
 
    Application read list of tests confirations from stdin, writing test resutls to stdout and all logging messages to stderr.
 
-   Supporter tests configuration example:
+   Supported tests configuration example:
 	 DNS
 		{"type":"dns","address":"http://yahoo.com"}
 	 HTTP
