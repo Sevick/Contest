@@ -2,10 +2,10 @@ package com.fbytes.contest.Contest.TestProcessor;
 
 import com.fbytes.contest.Contest.Logger.ILogger;
 import com.fbytes.contest.Contest.Model.TestParams.TestParams;
-import com.fbytes.contest.Contest.TestResultWriter.ITestResultWriter;
 import com.fbytes.contest.Contest.TestEngine.ITestEngine;
 import com.fbytes.contest.Contest.TestReader.ITestReader;
 import com.fbytes.contest.Contest.TestResultProcessor.ITestResultProcessor;
+import com.fbytes.contest.Contest.TestResultWriter.ITestResultWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,19 +47,6 @@ public class TestProcessor implements ITestExecutor {
 
 
     public void runTests(InputStream inputStream) throws Exception {
-        // initialize writer to ensure that they configured properly
-        if (writersMap != null && !writersMap.isEmpty()) {
-            writersMap.entrySet()
-                    .forEach(writersMapsEntry -> {
-                        try {
-                            writersMapsEntry.getValue().init();
-                        } catch (Exception e) {
-                            logger.logException("Unable to initialize TestResultWrite " + writersMapsEntry.getKey() + " " + e.getMessage(), e);
-                            throw new RuntimeException("Unable to initialize TestResultWrite " + writersMapsEntry.getKey());
-                        }
-                    });
-        }
-
         testReader.retrieveTests(inputStream, this);
         awaitTerminationAfterShutdown(executor);
     }

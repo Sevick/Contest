@@ -25,7 +25,7 @@ public class TestResultsLoader implements ITestResultsLoader {
     private HashGen hashGen;
 
     @Value("${contest.testresultsloader.ignoreErrors:true}")
-    private boolean ignoreErrors;
+    private Boolean ignoreErrors;
     @Value("${contest.testresultsloader.datafile:contest.log}")
     private String datafile;
     @Value("${contest.testresultsloader.readlimit:100}")

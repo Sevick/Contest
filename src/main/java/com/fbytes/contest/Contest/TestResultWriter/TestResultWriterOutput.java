@@ -14,13 +14,13 @@ public class TestResultWriterOutput extends TestResultWriter {
     private Boolean ignoreWriteErrors;
 
     @Override
-    public void write(TestResult testResult){
+    public void write(TestResult testResult) {
         try {
             System.out.println(testResult);
-        }
-        catch (Exception e){
-            logger.logException("Failed to write: "+e.getMessage(),e);
+        } catch (Exception e) {
+            logger.logException("Failed to write: " + e.getMessage(), e);
             if (!ignoreWriteErrors)
                 throw e;
-        }    }
+        }
+    }
 }

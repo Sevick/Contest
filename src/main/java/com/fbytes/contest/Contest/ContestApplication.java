@@ -21,15 +21,25 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @SpringBootApplication
 public class ContestApplication implements CommandLineRunner, ExitCodeGenerator {
-    @Autowired
-    private ILogger logger;
-    @Autowired
-    Environment env;
-    @Autowired
-    private TestProcessor testProcessor;
 
-    private int exitCode;
+    // ---------------------------------------------------------------------------------------------
+    // static part run outside of spring container
+
     static private Map<String, String> commandlineProperties = new ConcurrentHashMap<>();
+
+    static class CommandLinePropertySource extends PropertySource<String> {
+        Map<String, String> propertiesMap;
+
+        CommandLinePropertySource(Map<String, String> propertiesMap) {
+            super("commandline");
+            this.propertiesMap = propertiesMap;
+        }
+
+        @Override
+        public Object getProperty(String name) {
+            return propertiesMap.get(name);
+        }
+    }
 
     public static void main(String[] args) {
         // parse command line
@@ -50,7 +60,7 @@ public class ContestApplication implements CommandLineRunner, ExitCodeGenerator 
 
         // set default values
 
-        // apply parameters
+        // apply parameters / save to commandlineProperties to be exposed as environment variables
         if (commandLine.hasOption("help")) {
             printHelp();
             return;
@@ -77,7 +87,6 @@ public class ContestApplication implements CommandLineRunner, ExitCodeGenerator 
             commandlineProperties.put("contest.testresultwriterfile.logfile", commandLine.getOptionValue("logfile"));
         }
 
-        // Run container adding command line parameters to environment
         System.exit(SpringApplication.exit(new SpringApplicationBuilder()
                 .sources(ContestApplication.class)
                 .initializers(context -> context
@@ -87,6 +96,7 @@ public class ContestApplication implements CommandLineRunner, ExitCodeGenerator 
                 ).run(args)));
     }
 
+
     static private void printHelp() {
         String helpFilePath = "classpath:help.txt";
         try (InputStream in = new FileInputStream(ResourceUtils.getFile(helpFilePath))) {
@@ -94,8 +104,21 @@ public class ContestApplication implements CommandLineRunner, ExitCodeGenerator 
             System.out.println(helpText);
         } catch (IOException e) {
             System.out.println("Unable to read help file: " + helpFilePath + "  " + e.getMessage());
+            System.exit(-1);
         }
     }
+
+
+    // ---------------------------------------------------------------------------------------------
+    // running as spring container
+    @Autowired
+    private ILogger logger;
+    @Autowired
+    Environment env;
+    @Autowired
+    private TestProcessor testProcessor;
+
+    private int exitCode;
 
     @Override
     public void run(String... args) {
@@ -110,24 +133,8 @@ public class ContestApplication implements CommandLineRunner, ExitCodeGenerator 
         }
     }
 
-
     @Override
     public int getExitCode() {
         return exitCode;
-    }
-
-
-    static class CommandLinePropertySource extends PropertySource<String> {
-        Map<String, String> propertiesMap;
-
-        CommandLinePropertySource(Map<String, String> propertiesMap) {
-            super("commandline");
-            this.propertiesMap = propertiesMap;
-        }
-
-        @Override
-        public Object getProperty(String name) {
-            return propertiesMap.get(name);
-        }
     }
 }
